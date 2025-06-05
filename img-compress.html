@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Smart online image compressor tool - Reduce size, keep quality. SEO-optimized, responsive, and fast." />
+  <meta name="keywords" content="image compressor, reduce image size, jpg compressor, png optimizer, online tool" />
+  <title>Smart Image Compressor | Free Online JPG/PNG Optimizer</title>
+
+  <!-- AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+  <style>
+    :root {
+      --primary: #00b4d8;
+      --secondary: #90e0ef;
+      --accent: #0077b6;
+      --bg: #f0f4f8;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      --radius: 16px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(145deg, #e0f7fa, #f8fbff);
+      color: #222;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header, footer {
+      background: var(--primary);
+      color: #fff;
+      text-align: center;
+      padding: 1.2rem;
+      box-shadow: var(--shadow);
+    }
+
+    main {
+      max-width: 800px;
+      width: 95%;
+      margin: 2rem auto;
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+
+    .upload-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    label {
+      font-weight: 600;
+      color: #444;
+    }
+
+    input[type="file"],
+    input[type="range"],
+    button {
+      padding: 14px;
+      border-radius: var(--radius);
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    input[type="file"]:hover,
+    input[type="range"]:hover,
+    button:hover {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="range"] {
+      width: 100%;
+    }
+
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: var(--accent);
+    }
+
+    canvas {
+      max-width: 100%;
+      margin-top: 2rem;
+      display: none;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    #downloadLink {
+      display: none;
+      margin-top: 1rem;
+      padding: 14px;
+      background-color: #38b000;
+      color: white;
+      border-radius: var(--radius);
+      text-decoration: none;
+      text-align: center;
+      display: inline-block;
+      transition: var(--transition);
+    }
+
+    #downloadLink:hover {
+      background-color: #2a8700;
+    }
+
+    .ad-slot {
+      margin: 30px auto;
+      text-align: center;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      main {
+        padding: 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📸 Smart Image Compressor</h1>
+    <p>Compress images with adjustable quality – Fast & Free</p>
+  </header>
+
+  <!-- Top Ad Slot -->
+  <div class="ad-slot">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-YOUR-AD-UNIT-ID"
+         data-ad-slot="1234567890"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <main>
+    <section class="upload-section">
+      <label for="imageInput">📤 Upload Image File</label>
+      <input type="file" id="imageInput" accept="image/*" />
+
+      <label for="qualityRange">🛠 Compression Level: <span id="qualityValue">0.7</span></label>
+      <input type="range" id="qualityRange" min="0.1" max="1" step="0.1" value="0.7" />
+
+      <button onclick="compressImage()">🚀 Compress Image</button>
+    </section>
+
+    <section id="result">
+      <h2 style="margin-top: 2rem;">📥 Result</h2>
+      <canvas id="canvas"></canvas>
+      <a id="downloadLink" download="compressed-image.jpg">⬇ Download Image</a>
+    </section>
+  </main>
+
+  <!-- Bottom Ad Slot -->
+  <div class="ad-slot">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-YOUR-AD-UNIT-ID"
+         data-ad-slot="9876543210"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 SmartCompressor - All Rights Reserved</p>
+  </footer>
+
+  <script>
+    const imageInput = document.getElementById("imageInput");
+    const qualityRange = document.getElementById("qualityRange");
+    const qualityValue = document.getElementById("qualityValue");
+    const canvas = document.getElementById("canvas");
+    const downloadLink = document.getElementById("downloadLink");
+
+    qualityRange.addEventListener("input", () => {
+      qualityValue.textContent = qualityRange.value;
+    });
+
+    function compressImage() {
+      const file = imageInput.files[0];
+      if (!file) return alert("Please select an image.");
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const ctx = canvas.getContext("2d");
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          const quality = parseFloat(qualityRange.value);
+          const compressedData = canvas.toDataURL("image/jpeg", quality);
+          canvas.style.display = "block";
+          downloadLink.href = compressedData;
+          downloadLink.style.display = "inline-block";
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
+</body>
+</html>
